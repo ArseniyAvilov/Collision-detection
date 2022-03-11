@@ -38,17 +38,16 @@ export default class Polygon {
     }
 
     draw(context){
-        context.fillStyle = "rgb(0, 0, 200)"
-        let position = this.getPosition()
-        console.log(position)
-        position.push(position[0])
-        for(let i=0; i<this.n; i++){
-            context.moveTo(position[i][0], position[i][1]);
-            context.lineTo(position[i+1][0], position[i+1][1]);
-            
-            context.stroke();
-            
+        context.fillStyle = "#FFCC00";
+        let position = this.getPosition();
+        context.beginPath();
+        context.moveTo(position[0][0], position[0][1]);
+        for(let i=1; i<this.n; i++){  
+            context.lineTo(position[i][0], position[i][1]);
         }
+        context.closePath();    
+        context.stroke();
+        context.fill();
     }
 
     update(){

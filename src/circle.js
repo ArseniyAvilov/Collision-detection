@@ -1,37 +1,38 @@
-export default class Rectangle {
-    constructor(x, y, w, h) {
+export default class Circle {
+    constructor(x, y, r) {
         this.x = x
         this.y = y
-        this.w = w
-        this.h = h
+        this.r = r
         this.speed = {x: 0, y: 0}
     }
 
     setSpeed(x, y){
-
         this.speed.x = x
         this.speed.y = y
     }
+
     get left() {
         return this.x
     }
 
     get right() {
-        return this.x + this.w
+        return this.x + this.r
     }
 
     get top() {
-        return this.y
+        return this.r
     }
 
     get bottom() {
-        return this.y + this.h
+        return this.y + this.r
     }
 
     draw(context){
         context.fillStyle = "#FFCC00";
-        context.fillRect(this.x, this.y, this.w, this.h)
-        context.strokeRect(this.x, this.y, this.w, this.h)
+        context.beginPath();
+        context.arc(this.x, this.y, this.r, 0, 2*Math.PI);
+        context.stroke();
+        context.fill();
     }
 
     update(){

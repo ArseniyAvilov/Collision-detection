@@ -1,5 +1,6 @@
 import Rectangle from "./rectangle";
 import Polygon from "./polygon";
+import Circle from "./circle";
 
 const canvas = document.getElementById("cnvs");
 
@@ -17,7 +18,6 @@ function draw(tFrame) {
 
     // clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.beginPath()
     // draw
     gameState.rects.forEach((figure)=>{
         figure.draw(context)
@@ -57,16 +57,20 @@ function setup() {
     gameState.tickLength = 15 //ms
 
     gameState.rects = []
-    // const rectangle = new Rectangle(10,10, 30, 30)
-    // rectangle.setSpeed(5, 5)
-    // gameState.rects.push(rectangle)
-    //const rectangle1 = new Polygon(15,10, 3, 30)
-    //rectangle1.setSpeed(.5, .5)
-    //gameState.rects.push(rectangle1)
+    const rectangle = new Rectangle(50,98, 30, 30)
+    rectangle.setSpeed(5, 5)
+    gameState.rects.push(rectangle)
+    const rectangle1 = new Polygon(-67,10, 3, 30)
+    rectangle1.setSpeed(.5, .5)
+    gameState.rects.push(rectangle1)
     
-  const rectangle2 = new Polygon(20,25, 6, 30)
-  rectangle2.setSpeed(.5, .5)
-  gameState.rects.push(rectangle2)
+    const rectangle2 = new Polygon(20,25, 6, 30)
+    rectangle2.setSpeed(5, 5)
+    gameState.rects.push(rectangle2)
+
+    const rectangle3 = new Circle(100,100, 30)
+    rectangle3.setSpeed(-.5, -.5)
+    gameState.rects.push(rectangle3)
 
 }
 
