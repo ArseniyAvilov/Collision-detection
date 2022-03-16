@@ -30,6 +30,18 @@ function update(tick) {
     })
 }
 
+function collisionDetection(numTicks){
+    //console.log(gameState.rects.tickLength)
+    for(let i=0; i<3; i++)
+        for(let j=i+1; j<3; j++){
+            //gameState.rects[i].collision()
+            if (gameState.rects[i].intersects(gameState.rects[j])){
+                gameState.rects[i].collision()
+                gameState.rects[j].collision()
+            }
+        }
+}
+
 function run(tFrame) {
     gameState.stopCycle = window.requestAnimationFrame(run)
 
@@ -40,8 +52,11 @@ function run(tFrame) {
         const timeSinceTick = tFrame - gameState.lastTick
         numTicks = Math.floor(timeSinceTick / gameState.tickLength)
     }
-    queueUpdates(numTicks)
+
+    
+    queueUpdates(numTicks)   
     draw(tFrame)
+    collisionDetection(numTicks)
     gameState.lastRender = tFrame
 }
 
@@ -57,20 +72,24 @@ function setup() {
     gameState.tickLength = 15 //ms
 
     gameState.rects = []
-    const rectangle = new Rectangle(50,98, 30, 30)
-    rectangle.setSpeed(5, 5)
-    gameState.rects.push(rectangle)
-    const rectangle1 = new Polygon(-67,10, 3, 30)
-    rectangle1.setSpeed(.5, .5)
-    gameState.rects.push(rectangle1)
+   // const rectangle = new Rectangle(50,98, 30, 30)
+   // rectangle.setSpeed(5, 5)
+  //  gameState.rects.push(rectangle)
+    //const rectangle1 = new Polygon(-67,10, 4, 30)
+   // rectangle1.setSpeed(.5, .5)
+  // gameState.rects.push(rectangle1)
     
     const rectangle2 = new Polygon(20,25, 6, 30)
     rectangle2.setSpeed(5, 5)
     gameState.rects.push(rectangle2)
 
     const rectangle3 = new Circle(100,100, 30)
-    rectangle3.setSpeed(-.5, -.5)
+    rectangle3.setSpeed(3, 3)
     gameState.rects.push(rectangle3)
+
+    const rectangle4 = new Circle(500,500, 30)
+    rectangle4.setSpeed(-3, -3)
+    gameState.rects.push(rectangle4)
 
 }
 

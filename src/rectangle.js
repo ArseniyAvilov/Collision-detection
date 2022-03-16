@@ -5,6 +5,7 @@ export default class Rectangle {
         this.w = w
         this.h = h
         this.speed = {x: 0, y: 0}
+        this.type = 'rect'
     }
 
     setSpeed(x, y){
@@ -46,10 +47,28 @@ export default class Rectangle {
             point.y < this.y + this.h)
     }
 
-    intersects(rect) {
-        return (this.x < rect.x + rect.w)
-            && (rect.x < this.x + this.w)
-            && (this.y < rect.y + rect.h)
-            && (rect.y < this.y + this.w)
+    intersects(shape) {
+        if (shape.type === 'rect'){
+        return (this.x < shape.x + shape.w)
+            && (shape.x < this.x + this.w)
+            && (this.y < shape.y + shape.h)
+            && (shape.y < this.y + this.w)
+        }
+        else if (shape.type === 'circle'){
+            let closestPoint = {x, y};
+
+            if(shape.x < this.x) closestPoint.x = this.x;
+            else if (shape.x > this.right()) closestPoint.x = this.right();
+            else closestPoint.x = shape.x;
+
+            if(shape.y < this.y) closestPoint.y = this.y;
+            else if( shape.y < this.left()) closestPoint.y = this.left();
+            else closestPoint.y = shape.y;
+
+            const distance = Math.sqrt(Math.pow(closestPoint.x - shape.x, 2) + Math.pow(closestPoint.y - shape.y, 2));
+
+            if(distance < shape.radius) return true;
+            else return false ;
+        }
     }
 }
