@@ -54,39 +54,9 @@ export default class Circle {
         if (shape.type === "circle"){
             return Math.sqrt(Math.pow(this.x - shape.x, 2) +
             Math.pow(this.y - shape.y, 2)) < this.radius + shape.radius
-        } else if (shape.type === "polygon"){
-            let position = shape.getPosition()
-            for(let i=0; i<shape.n; i++){
-                let startPoint = position[i];
-                let endPoint = (i != shape.n - 1) ? position[i + 1] : position[0];
-                let sideNorVec = shape.get2PointVec(startPoint, endPoint, false);
-                let dotNorVec = shape.getSideNorml(sideNorVec, false);
-
-                const data1 = shape.calcProj(dotNorVec, position);
-                const dot = shape.dot([shape.x, shape.y], shape.normalize(dotNorVec));
-                if (shape.segDist(data1.min, data1.max, dot - this.radius, dot + this.radius)){
-                    console.log("hjh")
-                    return true
-                }
-            }
-            return false
         }
-       /* else if (shape.type === 'rect'){
-            let closestPoint = {x, y};
-
-            if(this.x < shape.x) closestPoint.x = shape.x;
-            else if (this.x > shape.x + shape.w) closestPoint.x = shape.x + shape.w;
-            else closestPoint.x = this.x;
-
-            if(this.y < shape.y) closestPoint.y = shape.y;
-            else if( this.y < shape.y + shape.h) closestPoint.y = shape.y + shape.h;
-            else closestPoint.y = this.y;
-
-            const distance = Math.sqrt(Math.pow(closestPoint.x - this.x, 2) + Math.pow(closestPoint.y - this.y, 2));
-
-            if(distance < this.radius) return true;
-            else return false ;
-        }*/
-
+         else if (shape.type === "polygon"){
+          
+        }
     }
 }

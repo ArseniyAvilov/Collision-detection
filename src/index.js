@@ -32,14 +32,16 @@ function update(tick) {
 
 function collisionDetection(numTicks){
     //console.log(gameState.rects.tickLength)
-    for(let i=0; i<3; i++)
-        for(let j=i+1; j<3; j++){
+   // for(let i=0; i<2; i++)
+     //   for(let j=i+1; j<2; j++){
             //gameState.rects[i].collision()
-            if (gameState.rects[i].intersects(gameState.rects[j])){
-                gameState.rects[i].collision()
-                gameState.rects[j].collision()
+           // console.log(gameState.rects[0])
+            if (gameState.rects[0].intersects(gameState.rects[1])){
+                console.log(gameState.rects.tickLength)
+                gameState.rects[0].collision()
+                gameState.rects[1].collision()
             }
-        }
+        
 }
 
 function run(tFrame) {
@@ -83,14 +85,13 @@ function setup() {
     rectangle2.setSpeed(5, 5)
     gameState.rects.push(rectangle2)
 
-    const rectangle3 = new Circle(100,100, 30)
-    rectangle3.setSpeed(3, 3)
-    gameState.rects.push(rectangle3)
+    // const rectangle3 = new Circle(100,100, 30)
+    // rectangle3.setSpeed(3, 3)
+    // gameState.rects.push(rectangle3)
 
-    const rectangle4 = new Circle(500,500, 30)
+    const rectangle4 = new Polygon(500,500, 6, 30)//Circle(500,500, 30)
     rectangle4.setSpeed(-3, -3)
     gameState.rects.push(rectangle4)
-
 }
 
 setup();

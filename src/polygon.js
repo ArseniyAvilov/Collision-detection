@@ -66,108 +66,112 @@ export default class Polygon {
         this.y += this.speed.y
     }
 
-    contains(point) {
-        return (point.x >= this.x &&
-            point.x < this.x + this.w &&
-            point.y >= this.y &&
-            point.y < this.y + this.h)
-    }
+    // contains(point) {
+    //     return (point.x >= this.x &&
+    //         point.x < this.x + this.w &&
+    //         point.y >= this.y &&
+    //         point.y < this.y + this.h)
+    // }
 
-    get2PointVec(p1, p2, isNormlize = true){
-
-        const x = p2[0] - p1[1];
-        const y = p2[0] - p1[1];
+    // normalize(vec2){
+    //     const x = vec2[0];
+    //     const y = vec2[1];
+    //     const model = Math.sqrt(x * x + y * y);
  
-        if (isNormlize) {
-            return this.normalize([x, y]);
+    //     return [x / model, y / model];
+    // }
+
+    // dot(vec2A, vec2B){
+    //     return vec2A[0] * vec2B[0] + vec2A[1] * vec2B[1];
+    // }
+
+    // edgeDirection(p1, p2, isNormlize = true){
+
+    //     const x = p2[0] - p1[0];
+    //     const y = p2[1] - p1[1];
+ 
+    //     if (isNormlize) {
+    //         return this.normalize([x, y]);
+    //     }
+    //     return [x, y];
+    // }
+
+    // orthogonal(vec, isNormlize = true){
+ 
+    //     const x = vec[0];
+    //     const y = vec[1];
+
+    //     if (isNormlize) {
+    //         this.normalize([y, -x])
+    //     }
+    //     return [y, -x];
+    // }
+
+    // verticesToEdges(vec){
+    //     let toEdge = [];
+    //     for(let i=0; i<vec.lenght; i++){
+    //         toEdge.push(this.edgeDirection(vec[i], vec[i+1]%vec.lenght))
+    //     }
+    //     return toEdge;
+    // }
+
+    // project(vec, axis){
+    //     let dots = [];
+    //     for(let i=0; i<vec.lenght; i++){
+    //         dots.push(this.dot(vec[i], axis))
+    //     }
+
+    //     return [min(dots), max(dots)]
+    // }
+
+    // overlap(projection1, projection2){
+    //     return min(projection1) <= max(projection2) ||
+    //         min(projection2) <= max(projection1)
+
+    // }
+
+    // separatingAxisTheorem(vertices_a, vertices_b){
+    //     let edges = this.verticesToEdges(vertices_a) + this.verticesToEdges(vertices_b)
+    //     let axes = []
+    //     for(let i=0; i< edges.lenght; i++){
+    //         axes.push(this.normalize(edges[i]))
+    //     }
+
+    //     for(let i=0; i< axes.length; i++){
+    //         const projection_a = this.project(vertices_a, axis) 
+    //         const projection_b = this.project(vertices_b, axis)
+
+    //         const overlapping = this.overlap(projection_a, projection_b)
+
+    //         if(!overlapping) return false
+    //     }
+    //     return true
+    // }
+
+    aabb(){
+        const position = this.getPosition();
+        if (this.n === 3){
+            let b = Math.sqrt(Math.pow(this.len, 2) - Math.pow(this.len/2, 2))/2;
+            let center = [position[0][0], position[0][1]+b];
+            return [center, b];
         }
-        return [x, y];
-    }
-
-    getSideNorml(vec2, isNormlize = true){
- 
-        const x = vec2[0];
-        const y = vec2[1];
- 
-                 // вектор по часовой стрелке 
-        //normal=(-y,x) || normal=(y,-x)
-        if (isNormlize) {
-            this.normalize([-y, x])
-        }
-        return [-y, x];
-    }
-
-    calcProj(axis, objPoints){
-        let min = 0;
-        let max = 0;
-        for (let i = 0; i < this.n; i++) {
-            const vec2 = [objPoints[i][0], objPoints[i][1]];
-            const dot = this.dot(vec2, this.normalize(axis));
- 
-            if (min === 0 || max === 0) {
-                min = max = dot;
-            } else {
-                min = (dot < min) ? dot : min;
-                max = (dot > max) ? dot : max;
-            }
- 
-        }
- 
-        return { min: min, max: max }
-    }
-    
-    dot(vec2A, vec2B){
-        return vec2A[0] * vec2B[0] + vec2A[1] * vec2B[1];
-    }
-
-    normalize(vec2){
-        const x = vec2[0];
-        const y = vec2[1];
-        const model = Math.sqrt(x * x + y * y);
- 
-        return [x / model, y / model];
-    }
-
-    segDist(min1, max1, min2, max2){
-        if (min1 < min2) {
-            return min2 < max1 && max2 > min1;
-        }
-        else {
-            return min1 < max2 && max1 > min2;
+        else if(this.n === 6){
+            let center = [position[5][0]+this.len, position[5][1]];
+            return [center, this.len];
         }
     }
 
     intersects(shape) {
         let position = this.getPosition()
+        console.log(shape.type)
 
         if (shape.type === "circle"){
-            for(let i=0; i<this.n; i++){
-                let startPoint = position[i];
-                let endPoint = (i != this.n - 1) ? position[i + 1] : position[0];
-                let sideNorVec = this.get2PointVec(startPoint, endPoint, false);
-                let dotNorVec = this.getSideNorml(sideNorVec, false);
-                
-                const data1 = this.calcProj(dotNorVec, position);
-                const dot = this.dot([shape.x, shape.y], this.normalize(dotNorVec));
-                //console.log(sideNorVec, dotNorVec)
-                if (this.segDist(data1.min, data1.max, dot - shape.radius, dot + shape.radius)){
-                    return true
-                }
-            }
-            return false
-        }else if (shape.type === "polygon"){
-            for(let i=0; i<this.n; i++){
-                let startPoint = position[i];
-                let endPoint = (i != this.n - 1) ? position[i + 1] : position[0];
-                let sideNorVec = this.get2PointVec(startPoint, endPoint, false);
-                let dotNorVec = this.getSideNorml(sideNorVec, false);
-                const data1 = this.calcProj(dotNorVec, position);
-                const data2 = this.calcProj(dotNorVec, shape.getPosition());
-                if (this.segDist(data1.min, data1.max, data2.min, data2.max)){
-                    return true
-                }
-            }
-            return false
+            const aabb = this.aabb()
+            return Math.sqrt(Math.pow(aabb[0][0].x - shape.x, 2) +
+            Math.pow(aabb[0][1].y - shape.y, 2)) < aabb[1] + shape.radius
+        }else {//if (shape.type === "polygon"){
+            console.log(this.separatingAxisTheorem(position, shape.getPosition()))
+            return this.separatingAxisTheorem(position, shape.getPosition())
         }
 
     }
